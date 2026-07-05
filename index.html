@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLC Performance | The Hidden Dojo</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- BRAND VARIABLES --- */
+        :root {
+            --bg-base: #050505; /* Pure Pitch black */
+            --bg-surface: rgba(30, 30, 30, 0.6); /* Smoked glass surface */
+            --text-main: #f0f0f0; /* Crisp white */
+            --text-muted: #a0a0a0; /* Lighter grey for better readability */
+            --accent: #ff6300; /* The vibrant NLC Orange */
+            --border-subtle: rgba(255, 255, 255, 0.08); /* Faint white border for glass edge */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; 
+        }
+
+        /* --- TYPOGRAPHY UPGRADES --- */
+        h1, h2, h3, .splash-title, .brand-logo {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .text-white { color: #ffffff; }
+        .text-orange { color: var(--accent); }
+
+        /* --- SPLASH SCREEN (THE GATE) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-base);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease-in-out, visibility 1s;
+        }
+
+        .splash-title {
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .splash-title .text-white {
+            font-weight: 800;
+        }
+
+        .splash-title .text-orange {
+            font-weight: 300;
+            letter-spacing: 4px;
+        }
+
+        .enter-btn {
+            font-family: 'Montserrat', sans-serif;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: var(--text-main);
+            border: 1px solid var(--text-muted);
+            padding: 15px 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .enter-btn:hover {
+            border-color: var(--accent);
+            background-color: var(--accent);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 99, 0, 0.3);
+        }
+
+        /* --- MAIN CONTENT (THE DOJO) --- */
+        #main-content {
+            opacity: 0;
+            visibility: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .main-logo {
+            display: block;
+            margin: 0 auto 40px auto;
+            max-width: 220px; 
+        }
+
+        .brand-logo {
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 0.2em;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .brand-logo .text-white { font-weight: 800; }
+        .brand-logo .text-orange { font-weight: 300; }
+
+        .subtitle {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 300;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            letter-spacing: 2px;
+            margin-top: 2.5em;
+            margin-bottom: 1em;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        h3 {
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 1.5em;
+            font-weight: 300;
+        }
+
+        strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* --- GLASSMORPHISM BOXES --- */
+        .package, .code-box, .apply-box {
+            background: var(--bg-surface);
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); 
+        }
+
+        /* Package Cards */
+        .package {
+            border-left: 3px solid var(--accent); 
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .package h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .price {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 99, 0, 0.2);
+        }
+
+        .package p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            color: var(--text-muted);
+            font-size: 1rem;
+            list-style-type: none;
+            font-weight: 300;
+        }
+
+        li {
+            margin-bottom: 12px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        li::before {
+            content: "▹";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* The Arsenal (Codes Section) */
+        .code-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .code-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .code-box {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .code-box h4 {
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .promo-code {
+            display: inline-block;
+            background-color: rgba(0, 0, 0, 0.5); 
+            color: var(--accent);
+            padding: 8px 15px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px dashed var(--accent);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+        }
+
+        /* Links & Buttons */
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #fff;
+        }
+
+        .btn {
+            font-family: 'Montserrat', sans-serif;
+            display: inline-block;
+            border: 1px solid var(--accent);
+            color: var(--text-main);
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            margin-top: 10px;
+            background: rgba(255, 99, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+            color: #000;
+            font-weight: 800;
+            box-shadow: 0 0 15px rgba(255, 99, 0, 0.4);
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 60px 0;
+        }
+
+        /* Apply Section */
+        .apply-box {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .contact-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        @media (min-width: 600px) {
+            .contact-links {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* --- MOBILE RESPONSIVENESS FIX --- */
+        @media (max-width: 600px) {
+            .splash-title {
+                font-size: 1.8rem; /* Reduces overall size on mobile */
+                letter-spacing: 1px;
+            }
+            
+            .splash-title .text-orange {
+                letter-spacing: 2px; /* Reduces the wide spacing slightly to fit the screen */
+            }
+
+            /* Proactive fix to ensure the footer logo also fits */
+            .brand-logo {
+                font-size: 1.6rem !important; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="splash-title"><span class="text-white">NLC</span> <span class="text-orange">PERFORMANCE</span></div>
+        <button class="enter-btn" onclick="enterDojo()">Enter The Hidden Dojo</button>
+    </div>
+
+    <div id="main-content">
+        
+        <img src="nlcp-logo.gif" alt="NLC Performance Logo" class="main-logo">
+        
+        <div class="apply-box">
+            <h2>The Screening</h2>
+            <p>I do not take on every athlete who asks. If you are ready to stop chasing fatigue, fix your chassis, and enter the Tactical Readiness System, submit your request below to begin the triage.</p>
+            
+            <div class="contact-links">
+                <a href="mailto:neil@nlcperformance.com" class="btn">Initiate Contact via Email</a>
+                <a href="https://www.linkedin.com/in/neil-lester-card-nlcperformance" target="_blank" class="btn">Initiate Contact via LinkedIn</a>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>The Standards</h2>
+
+        <div class="package">
+            <h3>1. 30-Day TRS Induction</h3>
+            <div class="price">£60.00 | One-Off Payment</div>
+            <p><em>Do not sign a contract until you prove the system works. Your entry into the Dojo begins with a mandatory 30-day biological reset. You complete the clinical Triage Form, we build your profile, and Day 1 begins.</em></p>
+            <ul>
+                <li><strong>Biological Triage:</strong> Automatic placement into your specific TRS Tier (Rebuild, Function, Capacity, or Performance).</li>
+                <li><strong>Nutrition Covered:</strong> Includes your annual Macro Snap software license setup.</li>
+                <li><strong>The 30-Day Review:</strong> At Day 25, you assess your bio-feedback and structural pain. If your chassis is fixed and you want to leave, you leave. If you want to continue, you roll onto a standard tier. Zero traps.</li>
+            </ul>
+        </div>
+
+        <div class="package">
+            <h3>2. TRS Standard (Online)</h3>
+            <div class="price">£75.00 / Month | Rolling Contract</div>
+            <p><em>The complete digital architecture of the Tactical Readiness System. Built for remote athletes who need elite programming without the coaching overhead.</em></p>
+            <ul>
+                <li><strong>Everfit Access:</strong> Full access to the Daily App and your rolling TRS programming.</li>
+                <li><strong>Autoregulation:</strong> Daily Morning CO2 tracking and HR Drop integration.</li>
+                <li><strong>The Weekly Architecture:</strong> 3x high-arousal sessions (A, B, C) + dedicated CNS recovery protocols.</li>
+                <li><strong>No Commitments:</strong> Cancel anytime. We build autonomy, not dependency.</li>
+            </ul>
+        </div>
+
+        <div class="package">
+            <h3>3. TRS Premium (Hybrid & In-Person)</h3>
+            <div class="price">£150.00 / Month | Limited Roster</div>
+            <p><em>For local combat athletes and tactical operators requiring absolute maximal output. This tier grants you direct access to our clinical hardware and advanced diagnostic coaching.</em></p>
+            <ul>
+                <li><strong>Everything in Standard.</strong></li>
+                <li><strong>Hardware Access:</strong> Direct utilization of the Exxentric kBox (Flywheel Eccentrics).</li>
+                <li><strong>Advanced Diagnostics:</strong> Oxygen Advantage (OA) breathing protocols and StrongFirst kinetic refinements.</li>
+                <li><strong>Recovery Infrastructure:</strong> Access to deliberate heat exposure (Sauna) protocols.</li>
+                <li><strong>Technical Review:</strong> Direct video analysis of your lifts and isometric holds.</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2>The Ethos: Biology Dictates Protocol</h2>
+        <p>We do not guess, and we do not force athletes into generic, fatigue-chasing programs. The Tactical Readiness System (TRS) relies on your current physiological state to dictate your training volume.</p>
+        
+        <p><strong>The Triage Logic</strong><br>
+        When you enter the Dojo, your central nervous system fatigue, structural integrity, and force-absorption capacity are clinically measured. Based on your data, the system places you into the exact tier your body requires:</p>
+        
+        <ul>
+            <li><strong>Rebuild:</strong> Structural repair and pain mitigation.</li>
+            <li><strong>Function:</strong> Bracing mechanics and baseline armor.</li>
+            <li><strong>Capacity:</strong> Extreme isometrics and eccentric engine building.</li>
+            <li><strong>Performance:</strong> High-velocity output and elite autonomic control.</li>
+        </ul>
+
+        <hr>
+
+        <h2>The Arsenal (Athlete Perks)</h2>
+        <p>NLC Performance athletes get access to the tools I personally use and trust for recovery. Use the codes below to support the standard.</p>
+        
+        <div class="code-grid">
+            <div class="code-box">
+                <h4>Awesome Supplements</h4>
+                <div class="promo-code">LESTERCARD10</div><br>
+                <a href="https://awesomesupplements.co.uk/?ref=NLCPerformance&utm_campaign=affiliate_promotion&utm_medium=affiliate&utm_source=gapaffiliate" target="_blank" class="btn">Shop Awesome</a>
+            </div>
+
+            <div class="code-box">
+                <h4>Vivobarefoot</h4>
+                <div class="promo-code">NEILLESTERCARD15</div><br>
+                <a href="https://glnk.io/3xyx1/neil" target="_blank" class="btn">Shop Vivo</a>
+            </div>
+        </div>
+
+        <div class="code-box" style="margin-top: 20px;">
+            <h4>Internal Tools</h4>
+            <p style="font-size: 0.9rem; margin-top: 10px;">The NLC Quick & The Dead Protocol Timer</p>
+            <a href="https://nlcperformance.github.io/NLC-Performance-Timer/" target="_blank" class="btn">Access Timer</a>
+        </div>
+
+        <div style="text-align: center; margin-top: 100px; padding-bottom: 20px;">
+            <div class="subtitle" style="margin-bottom: 20px;">Adapt. Recover. Master.</div>
+            <h1 class="brand-logo" style="font-size: 1.5rem; margin-top: 0;"><span class="text-white">NLC</span> <span class="text-orange">PERFORMANCE</span></h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">&copy; 2026 NLC Performance</p>
+        </div>
+
+    </div>
+
+    <script>
+        // JavaScript to handle the Splash Screen fade out
+        function enterDojo() {
+            const splash = document.getElementById('splash-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            splash.style.opacity = '0';
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                mainContent.classList.add('visible');
+                window.scrollTo(0,0);
+            }, 1000); 
+        }
+    </script>
+</body>
+</html>
